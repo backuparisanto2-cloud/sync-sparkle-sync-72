@@ -1,14 +1,24 @@
-# Welcome to your Lovable project
+# Ivory Sync Hub
+
+Two way syncing dengan repo ini 
+
+https://github.com/backuparisanto2-cloud/ivory-gold-inventory.git 
+
+
+
+Dan tampilkan di project
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://sync-sparkle-sync-72.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e2d4cf53-4c2c-4a44-8311-891defe1d4c0).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +30,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
