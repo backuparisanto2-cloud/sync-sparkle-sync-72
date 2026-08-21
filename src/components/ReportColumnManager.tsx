@@ -30,6 +30,44 @@ export function ReportColumnManager({
   const visible = columns.filter((c) => c.visible);
   const hidden = columns.filter((c) => !c.visible);
 
+  const [presets, setPresets] = useState<ColumnPreset[]>([]);
+  const [presetName, setPresetName] = useState("");
+  const [activePreset, setActivePreset] = useState("");
+
+  useEffect(() => {
+    setPresets(loadPresets());
+  }, []);
+
+  function handleSavePreset() {
+    const name = presetName.trim();
+    if (!name) {
+      toast.error("Beri nama preset terlebih dahulu.");
+      return;
+    }
+    const next = savePreset(name, columns);
+    setPresets(next);
+    const saved = next.find((p) => p.name.toLowerCase() === name.toLowerCase());
+    setActivePreset(saved?.id ?? "");
+    setPresetName("");
+    toast.success(`Preset "${name}" tersimpan.`);
+  }
+
+  function handleLoadPreset(id: string) {
+    const preset = presets.find((p) => p.id === id);
+    if (!preset) return;
+    setActivePreset(id);
+    onChange(preset.columns.map((c) => ({ ...c })));
+    toast.success(`Preset "${preset.name}" dimuat.`);
+  }
+
+  function handleDeletePreset() {
+    const preset = presets.find((p) => p.id === activePreset);
+    if (!preset) return;
+    setPresets(deletePreset(preset.id));
+    setActivePreset("");
+    toast.success(`Preset "${preset.name}" dihapus.`);
+  }
+
   function move(key: ColumnKey, delta: number) {
     const next = [...columns];
     const from = next.findIndex((c) => c.key === key);
