@@ -317,10 +317,24 @@ function LaporanPage() {
           </div>
 
           {filtered.tanpaTanggal.length > 0 ? (
-            <p className="mt-3 text-[11px] text-muted-foreground">
-              {filtered.tanpaTanggal.length} barang tanpa tanggal pembelian tidak masuk periode ini.
-            </p>
+            <label className="mt-3 flex items-center gap-2 text-[12px] text-muted-foreground">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-current"
+                checked={sertakanTanpaTanggal}
+                onChange={(e) => setSertakanTanpaTanggal(e.target.checked)}
+              />
+              Sertakan {filtered.tanpaTanggal.length} barang tanpa tanggal pembelian
+            </label>
           ) : null}
+
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Data pembelian terisi pada {kelengkapan.denganHarga} dari{" "}
+            {kelengkapan.denganHarga + kelengkapan.tanpaHarga} barang di tampilan ini
+            {kelengkapan.tanpaHarga > 0
+              ? ` — lengkapi harga & tanggal beli lewat form barang agar nilai rupiah akurat.`
+              : "."}
+          </p>
         </section>
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
