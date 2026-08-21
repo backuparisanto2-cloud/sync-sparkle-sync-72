@@ -24,13 +24,14 @@ import {
   roomsQuery,
   sharedItemsQuery,
 } from "@/lib/inventory";
-import { applyFilters, buildRows, byCondition, groupBy, presetRange, type Scope } from "@/lib/report";
+import { applyFilters, buildRows, byCondition, presetRange, type Scope } from "@/lib/report";
 import {
   COLUMN_MAP,
   defaultColumnConfig,
   enrichRows,
   formatCell,
   sortRows,
+  summarizeByCategory,
   type ColumnConfig,
   type ColumnKey,
   type SortState,
