@@ -136,16 +136,24 @@ function LaporanPage() {
     return { unit, pembelian, depresiasi, nilaiBuku, perluPerhatian };
   }, [rows]);
 
+  const kelengkapan = useMemo(() => {
+    let tanpaHarga = 0;
+    let denganHarga = 0;
+    for (const row of scopedRows) {
+      if (row.purchase_price === null) tanpaHarga += 1;
+      else denganHarga += 1;
+    }
+    return { tanpaHarga, denganHarga };
+  }, [scopedRows]);
+
   const perKondisi = useMemo(
-    () => byCondition(filtered.rows, conditions.data ?? []),
-    [filtered.rows, conditions.data],
+    () => byCondition(scopedRows, conditions.data ?? []),
+    [scopedRows, conditions.data],
   );
-  const perGrup = useMemo(
-    () =>
-      groupBy(filtered.rows, (r) => r.group)
-        .sort((a, b) => b.nilai - a.nilai)
-        .slice(0, 8),
-    [filtered.rows],
+
+  const perKategori = useMemo(
+    () => summarizeByCategory(enriched, basisGrup),
+    [enriched, basisGrup],
   );
 
   const visibleColumns = columns.filter((c) => c.visible);
