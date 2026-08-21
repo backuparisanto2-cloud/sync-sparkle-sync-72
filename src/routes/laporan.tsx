@@ -367,18 +367,97 @@ function LaporanPage() {
             </ul>
           </div>
           <div className="rounded-xl border border-gold-line bg-card/60 p-4">
-            <h2 className="font-display text-lg font-semibold">Pembelian terbesar per grup</h2>
+            <h2 className="font-display text-lg font-semibold">Pembelian terbesar</h2>
             <ul className="mt-3 space-y-2">
-              {perGrup.map((b) => (
+              {perKategori.slice(0, 8).map((b) => (
                 <li key={b.key} className="flex items-center justify-between gap-3 text-sm">
                   <span className="truncate">{b.key}</span>
-                  <span className="shrink-0 text-muted-foreground">{formatRupiah(b.nilai) ?? "-"}</span>
+                  <span className="shrink-0 text-muted-foreground">
+                    {formatRupiah(b.pembelian) ?? "-"}
+                  </span>
                 </li>
               ))}
-              {perGrup.length === 0 ? (
+              {perKategori.length === 0 ? (
                 <li className="text-sm text-muted-foreground">Tidak ada data.</li>
               ) : null}
             </ul>
+          </div>
+        </section>
+
+        <section className="rounded-xl border border-gold-line bg-card/60 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-display text-lg font-semibold">
+              Pembelian &amp; nilai buku per kategori
+            </h2>
+            <Select value={basisGrup} onValueChange={(v) => setBasisGrup(v as "grup" | "nama")}>
+              <SelectTrigger className="h-9 w-52">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="grup">Per kategori / kamar</SelectItem>
+                <SelectItem value="nama">Per nama barang</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="mt-3 overflow-x-auto rounded-lg border border-gold-line/70">
+            <table className="w-full min-w-max text-sm">
+              <thead className="bg-accent/40">
+                <tr>
+                  <th className="px-3 py-2 text-left font-medium">
+                    {basisGrup === "nama" ? "Nama barang" : "Kategori"}
+                  </th>
+                  <th className="px-3 py-2 text-right font-medium">Jenis</th>
+                  <th className="px-3 py-2 text-right font-medium">Unit</th>
+                  <th className="px-3 py-2 text-right font-medium">Pembelian</th>
+                  <th className="px-3 py-2 text-right font-medium">Depresiasi</th>
+                  <th className="px-3 py-2 text-right font-medium">Nilai buku</th>
+                </tr>
+              </thead>
+              <tbody>
+                {perKategori.map((b) => (
+                  <tr key={b.key} className="border-t border-gold-line/60">
+                    <td className="px-3 py-2">{b.key}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{b.jenis}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{b.unit}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">
+                      {formatRupiah(b.pembelian) ?? "-"}
+                    </td>
+                    <td className="px-3 py-2 text-right tabular-nums">
+                      {formatRupiah(b.depresiasi) ?? "-"}
+                    </td>
+                    <td className="px-3 py-2 text-right tabular-nums">
+                      {formatRupiah(b.nilaiBuku) ?? "-"}
+                    </td>
+                  </tr>
+                ))}
+                {perKategori.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-3 py-6 text-center text-muted-foreground">
+                      Tidak ada data untuk periode ini.
+                    </td>
+                  </tr>
+                ) : null}
+              </tbody>
+              {perKategori.length > 0 ? (
+                <tfoot className="border-t border-gold-line bg-accent/30 font-medium">
+                  <tr>
+                    <td className="px-3 py-2">Total</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{rows.length}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{summary.unit}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">
+                      {formatRupiah(summary.pembelian) ?? "-"}
+                    </td>
+                    <td className="px-3 py-2 text-right tabular-nums">
+                      {formatRupiah(summary.depresiasi) ?? "-"}
+                    </td>
+                    <td className="px-3 py-2 text-right tabular-nums">
+                      {formatRupiah(summary.nilaiBuku) ?? "-"}
+                    </td>
+                  </tr>
+                </tfoot>
+              ) : null}
+            </table>
           </div>
         </section>
 
