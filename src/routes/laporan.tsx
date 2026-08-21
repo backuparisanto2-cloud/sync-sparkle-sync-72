@@ -93,6 +93,8 @@ function LaporanPage() {
   const [masaManfaat, setMasaManfaat] = useState(4);
   const [columns, setColumns] = useState<ColumnConfig[]>(defaultColumnConfig);
   const [sort, setSort] = useState<SortState>(null);
+  const [sertakanTanpaTanggal, setSertakanTanpaTanggal] = useState(false);
+  const [basisGrup, setBasisGrup] = useState<"grup" | "nama">("grup");
 
   const range = mode === "bulan" ? monthRange(bulan) : { dari, sampai };
 
