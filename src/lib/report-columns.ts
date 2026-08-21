@@ -152,3 +152,44 @@ export function sortRows(rows: EnrichedRow[], sort: SortState): EnrichedRow[] {
     return String(va).localeCompare(String(vb), "id") * factor;
   });
 }
+
+export type CategoryBucket = {
+  key: string;
+  jenis: number;
+  unit: number;
+  pembelian: number;
+  depresiasi: number;
+  nilaiBuku: number;
+  perluPerhatian: number;
+};
+
+/** Ringkasan pembelian & nilai buku per kategori barang atau per nama barang. */
+export function summarizeByCategory(
+  rows: EnrichedRow[],
+  basis: "grup" | "nama",
+): CategoryBucket[] {
+  const map = new Map<string, CategoryBucket>();
+  for (const row of rows) {
+    const key = basis === "nama" ? row.name : row.scope === "kamar" ? "Barang Kamar" : row.group;
+    let bucket = map.get(key);
+    if (!bucket) {
+      bucket = {
+        key,
+        jenis: 0,
+        unit: 0,
+        pembelian: 0,
+        depresiasi: 0,
+        nilaiBuku: 0,
+        perluPerhatian: 0,
+      };
+      map.set(key, bucket);
+    }
+    bucket.jenis += 1;
+    bucket.unit += row.quantity;
+    bucket.pembelian += row.nilai_total ?? 0;
+    bucket.depresiasi += row.depresiasi ?? 0;
+    bucket.nilaiBuku += row.nilai_buku ?? 0;
+    if (row.condition !== "Baik") bucket.perluPerhatian += 1;
+  }
+  return [...map.values()].sort((a, b) => b.pembelian - a.pembelian || b.unit - a.unit);
+}
