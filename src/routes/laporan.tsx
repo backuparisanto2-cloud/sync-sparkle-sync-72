@@ -108,10 +108,15 @@ function LaporanPage() {
     [base, range.dari, range.sampai, lingkup, lantai],
   );
 
+  const scopedRows = useMemo(
+    () => (sertakanTanpaTanggal ? [...filtered.rows, ...filtered.tanpaTanggal] : filtered.rows),
+    [filtered.rows, filtered.tanpaTanggal, sertakanTanpaTanggal],
+  );
+
   const asOf = range.sampai ? new Date(`${range.sampai}T23:59:59`) : new Date();
   const enriched = useMemo(
-    () => enrichRows(filtered.rows, masaManfaat, asOf),
-    [filtered.rows, masaManfaat, range.sampai],
+    () => enrichRows(scopedRows, masaManfaat, asOf),
+    [scopedRows, masaManfaat, range.sampai],
   );
   const rows = useMemo(() => sortRows(enriched, sort), [enriched, sort]);
 
