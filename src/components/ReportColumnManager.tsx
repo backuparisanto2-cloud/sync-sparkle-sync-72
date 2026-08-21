@@ -103,6 +103,63 @@ export function ReportColumnManager({
         </Button>
       </div>
 
+      <div className="rounded-lg border border-gold-line/70 bg-background/40 p-3">
+        <div className="flex items-center gap-2">
+          <Bookmark className="h-4 w-4 text-gold" />
+          <h3 className="text-sm font-medium">Preset kolom</h3>
+        </div>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="preset-load">Muat preset tersimpan</Label>
+            <div className="flex gap-2">
+              <Select value={activePreset} onValueChange={handleLoadPreset}>
+                <SelectTrigger id="preset-load" className="h-9">
+                  <SelectValue
+                    placeholder={presets.length ? "Pilih preset…" : "Belum ada preset"}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {presets.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 shrink-0 text-destructive"
+                disabled={!activePreset}
+                onClick={handleDeletePreset}
+                aria-label="Hapus preset"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="preset-name">Simpan susunan saat ini</Label>
+            <div className="flex gap-2">
+              <Input
+                id="preset-name"
+                value={presetName}
+                placeholder="Nama preset, mis. Laporan Pajak"
+                className="h-9"
+                onChange={(e) => setPresetName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSavePreset();
+                }}
+              />
+              <Button size="sm" className="h-9 shrink-0" onClick={handleSavePreset}>
+                Simpan
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <ul className="space-y-2">
         {visible.map((col, index) => (
           <li
