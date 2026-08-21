@@ -193,3 +193,66 @@ export function summarizeByCategory(
   }
   return [...map.values()].sort((a, b) => b.pembelian - a.pembelian || b.unit - a.unit);
 }
+
+/** Kunci grup untuk sebuah baris, konsisten dengan summarizeByCategory. */
+export function categoryKeyOf(row: EnrichedRow, basis: "grup" | "nama"): string {
+  if (basis === "nama") return row.name;
+  return row.scope === "kamar" ? "Barang Kamar" : row.group;
+}
+
+export function rowsInCategory(
+  rows: EnrichedRow[],
+  basis: "grup" | "nama",
+  key: string,
+): EnrichedRow[] {
+  return rows.filter((row) => categoryKeyOf(row, basis) === key);
+}
+
+export type TrendPoint = {
+  bulan: string;
+  label: string;
+  pembelian: number;
+  depresiasi: number;
+  nilaiBuku: number;
+};
+
+const BULAN_SINGKAT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "Mei",
+  "Jun",
+  "Jul",
+  "Agu",
+  "Sep",
+  "Okt",
+  "Nov",
+  "Des",
+];
+
+/** Tren pembelian/depresiasi/nilai buku per bulan berdasarkan tanggal beli. */
+export function monthlyTrend(rows: EnrichedRow[]): TrendPoint[] {
+  const map = new Map<string, TrendPoint>();
+  for (const row of rows) {
+    if (!row.purchase_date) continue;
+    const bulan = row.purchase_date.slice(0, 7);
+    const [y, m] = bulan.split("-").map(Number);
+    if (!y || !m) continue;
+    let point = map.get(bulan);
+    if (!point) {
+      point = {
+        bulan,
+        label: `${BULAN_SINGKAT[m - 1]} ${String(y).slice(2)}`,
+        pembelian: 0,
+        depresiasi: 0,
+        nilaiBuku: 0,
+      };
+      map.set(bulan, point);
+    }
+    point.pembelian += row.nilai_total ?? 0;
+    point.depresiasi += row.depresiasi ?? 0;
+    point.nilaiBuku += row.nilai_buku ?? 0;
+  }
+  return [...map.values()].sort((a, b) => a.bulan.localeCompare(b.bulan));
+}
