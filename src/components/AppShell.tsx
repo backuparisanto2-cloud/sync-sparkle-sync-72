@@ -1,11 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { LayoutDashboard, DoorClosed, Wrench } from "lucide-react";
+import { LayoutDashboard, DoorClosed, Wrench, FileBarChart } from "lucide-react";
 import type { ReactNode } from "react";
 
 const nav = [
   { to: "/", label: "Ringkasan", icon: LayoutDashboard },
   { to: "/kamar", label: "Kamar", icon: DoorClosed },
   { to: "/fasilitas", label: "Fasilitas Utama", icon: Wrench },
+  { to: "/laporan", label: "Laporan", icon: FileBarChart },
 ] as const;
 
 export function AppShell({
@@ -65,7 +66,7 @@ export function AppShell({
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-gold-line bg-card/95 backdrop-blur md:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-3">
+        <div className="mx-auto grid max-w-md grid-cols-4">
           {nav.map((item) => (
             <Link
               key={item.to}
