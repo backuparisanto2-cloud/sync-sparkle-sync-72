@@ -17,15 +17,15 @@ function sanitize(columns: unknown): ColumnConfig[] | null {
   for (const raw of columns) {
     if (!raw || typeof raw !== "object") continue;
     const item = raw as Record<string, unknown>;
-    if (typeof item.key !== "string" || !VALID_KEYS.has(item.key)) continue;
-    if (cleaned.some((c) => c.key === item.key)) continue;
+    if (typeof item['key'] !== "string" || !VALID_KEYS.has(item['key'])) continue;
+    if (cleaned.some((c) => c.key === item['key'])) continue;
     cleaned.push({
-      key: item.key as ColumnKey,
+      key: item['key'] as ColumnKey,
       label:
-        typeof item.label === "string" && item.label.trim()
-          ? item.label
-          : (ALL_COLUMNS.find((c) => c.key === item.key)?.label ?? item.key),
-      visible: item.visible !== false,
+        typeof item['label'] === "string" && item['label'].trim()
+          ? item['label']
+          : (ALL_COLUMNS.find((c) => c.key === item['key'])?.label ?? item['key']),
+      visible: item['visible'] !== false,
     });
   }
   if (!cleaned.length) return null;
@@ -49,13 +49,13 @@ export function loadPresets(): ColumnPreset[] {
       .map((entry): ColumnPreset | null => {
         if (!entry || typeof entry !== "object") return null;
         const item = entry as Record<string, unknown>;
-        const columns = sanitize(item.columns);
-        if (!columns || typeof item.name !== "string") return null;
+        const columns = sanitize(item['columns']);
+        if (!columns || typeof item['name'] !== "string") return null;
         return {
-          id: typeof item.id === "string" ? item.id : crypto.randomUUID(),
-          name: item.name,
+          id: typeof item['id'] === "string" ? item['id'] : crypto.randomUUID(),
+          name: item['name'],
           columns,
-          savedAt: typeof item.savedAt === "string" ? item.savedAt : new Date().toISOString(),
+          savedAt: typeof item['savedAt'] === "string" ? item['savedAt'] : new Date().toISOString(),
         };
       })
       .filter((p): p is ColumnPreset => p !== null);
